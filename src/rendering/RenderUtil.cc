@@ -554,7 +554,15 @@ void RenderUtil::Update()
         // have multiple animations. Animation time is associated with
         // current animation that is being played. It is also adjusted if
         // interpotate_x is enabled.
-        actorMesh->UpdateSkeletonAnimation(animData.time);
+        auto animTime = animData.time;
+
+        // From ECS
+        //if ()
+        //{
+        //  animTime =
+        //}
+
+        actorMesh->UpdateSkeletonAnimation(animTime);
 
         // manually update root transform in order to sync with trajectory
         // animation
@@ -1023,17 +1031,25 @@ void RenderUtilPrivate::UpdateRenderingEntities(
         // Trajectory origin
         this->entityPoses[_entity] = _pose->Data();
 
+        auto animTime = this->simTime;
+        auto animTimeComp = _ecm.Component<components::AnimationTime>(_entity);
+        if (animTimeComp)
+        {
+          animTime = animTimeComp->Data();
+        }
+
+        // Bone poses calculated by ign-common
         if (this->actorManualSkeletonUpdate)
         {
-          // Bone poses calculated by ign-common
           this->actorTransforms[_entity] =
               this->sceneManager.ActorSkeletonTransformsAt(
-              _entity, this->simTime);
+              _entity, animTime);
         }
+        // Bone poses calculated by ign-rendering
         else
         {
           this->actorAnimationData[_entity] =
-              this->sceneManager.ActorAnimationAt(_entity, this->simTime);
+              this->sceneManager.ActorAnimationAt(_entity, animTime);
         }
 
         // Trajectory pose set by other systems

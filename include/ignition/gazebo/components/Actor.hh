@@ -17,6 +17,8 @@
 #ifndef IGNITION_GAZEBO_COMPONENTS_ACTOR_HH_
 #define IGNITION_GAZEBO_COMPONENTS_ACTOR_HH_
 
+#include <chrono>
+
 #include <ignition/msgs/actor.pb.h>
 
 #include <sdf/Actor.hh>
@@ -47,6 +49,18 @@ namespace components
   using Actor =
       Component<sdf::Actor, class ActorTag, serializers::ActorSerializer>;
   IGN_GAZEBO_REGISTER_COMPONENT("ign_gazebo_components.Actor", Actor)
+
+  /// \brief True if the actor's script from SDF should be used. False
+  /// if the actor should be commanded by components.
+  using ActorScriptFromSdf = Component<bool, class ActorScriptFromSdfTag>;
+  IGN_GAZEBO_REGISTER_COMPONENT("ign_gazebo_components.ActorScriptFromSdf",
+      ActorScriptFromSdf)
+
+  /// \brief Time in seconds within animation being currently played.
+  using AnimationTime = Component<std::chrono::steady_clock::duration,
+      class AnimationTimeTag>;
+  IGN_GAZEBO_REGISTER_COMPONENT("ign_gazebo_components.AnimationTime",
+      AnimationTime)
 }
 }
 }

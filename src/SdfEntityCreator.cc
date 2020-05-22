@@ -295,6 +295,8 @@ Entity SdfEntityCreator::CreateEntities(const sdf::Actor *_actor)
       components::Pose(_actor->RawPose()));
   this->dataPtr->ecm->CreateComponent(actorEntity,
       components::Name(_actor->Name()));
+  this->dataPtr->ecm->CreateComponent(actorEntity,
+      components::ActorScriptFromSdf(true));
 
   // Actor plugins
   this->dataPtr->eventManager->Emit<events::LoadPlugins>(actorEntity,
